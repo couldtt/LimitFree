@@ -1,16 +1,14 @@
 __author__ = 'couldtt'
-from LimitFreeCrawler import TaobaoCrawler, DuokanCrawler
 import threading
+from config import config
 
 class Crawl(threading.Thread):
 
     def __init__(self, type):
-        if type == 'taobao':
-            self.url = "ebook.taobao.com"
-            self.crawler = TaobaoCrawler(self.url)
-        elif type == 'duokan':
-            self.url = "www.duokan.com"
-            self.crawler = DuokanCrawler(self.url)
+        crawler_name = type.capitalize() + "Crawler"
+        crawler_module = __import__('LimitFreeCrawler')
+        crawler_concrete = getattr(crawler_module, crawler_name)
+        self.crawler = crawler_concrete(config[type]['url'])
 
     def run(self):
         try:
