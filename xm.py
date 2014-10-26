@@ -1,6 +1,6 @@
 __author__ = 'couldtt'
 import threading
-from config import config
+from config import config, crawl_container, DEBUG, debug_container
 
 class Crawl(threading.Thread):
 
@@ -8,7 +8,7 @@ class Crawl(threading.Thread):
         crawler_name = type.capitalize() + "Crawler"
         crawler_module = __import__('LimitFreeCrawler')
         crawler_concrete = getattr(crawler_module, crawler_name)
-        self.crawler = crawler_concrete(config[type]['url'])
+        self.crawler = crawler_concrete(config[type])
 
     def run(self):
         try:
@@ -17,7 +17,10 @@ class Crawl(threading.Thread):
             res = {}
         return res
 
-crawl_container = ['duokan', 'taobao']
+
+if DEBUG:
+    crawl_container = debug_container
+
 for site in crawl_container:
     crawl = Crawl(site)
     print(crawl.run())
