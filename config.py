@@ -2,7 +2,7 @@ __author__ = 'couldtt'
 
 DEBUG = True
 
-config = {
+crawl_config = {
     'duokan': {
         'platform_name': '多看',
         'url': 'http://www.duokan.com',
@@ -22,4 +22,4 @@ config = {
 }
 
 crawl_container = ['duokan', 'taobao', 'dangdang']
-debug_container = ['duokan', 'taobao', 'dangdang']
+debug_container = ['duokan', 'taobao']

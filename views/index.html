@@ -10,14 +10,18 @@
     <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-{% for books in platforms %}
-{% for book in books %}
-<div class="col-lg-4">
-    <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
+{% for platform in platforms %}
+<div>
+    {{ platform['config']['platform_name'] }}
+    {% for book in platform['books'] %}
+    <div class="col-lg-4">
+        <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
 
-    <h3><a href="{{ book.href }}" target="_blank">{{ book.title }}</a></h3>
+        <h3><a href="{{ book.href }}" target="_blank">{{ book.title }}</a></h3>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
+<hr/>
 {% endfor %}
 </body>
 </html>

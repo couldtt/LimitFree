@@ -36,7 +36,11 @@ class Crawler():
         self.pre_parse()
         self.parse()
         self.pipe()
-        return self.res
+        platform = {
+            'config': self.config,
+            'books': self.res,
+        }
+        return platform
 
 # 淘宝
 class TaobaoCrawler(Crawler):
