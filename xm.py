@@ -1,6 +1,6 @@
 __author__ = 'couldtt'
 import threading
-from config import crawl_config, crawl_container, DEBUG, debug_container
+from config import crawl_config, crawl_container, DEBUG, debug_container, remark_config
 from bottle import route, run, jinja2_view
 from storage import MongoStorage
 
@@ -36,6 +36,9 @@ def index():
             crawl = Crawl(site)
             platforms.append(crawl.run())
         ms.save(platforms)
-    return {'platforms': platforms}
+    return {
+        'platforms': platforms,
+        'remarks': remark_config
+    }
 
 run(host='localhost', port=8080)

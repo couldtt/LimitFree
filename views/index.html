@@ -8,20 +8,30 @@
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <style>
+        #container h3 {
+            margin-left: 15px;;
+        }
+    </style>
 </head>
 <body>
+{% for remark in remarks %}
+<div class="alert alert-success" role="alert">
+    <span class="alert-link">注意：{{ remark }}</span>
+</div>
+{% endfor %}
 {% for platform in platforms %}
-<div>
-    {{ platform['config']['platform_name'] }}
+<div id="container" style="margin: 10px auto; width: 1000px; float:left;">
+    <h3>{{ platform['config']['platform_name'] }}</h3>
     {% for book in platform['books'] %}
-    <div class="col-lg-4">
-        <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
-
-        <h3><a href="{{ book.href }}" target="_blank">{{ book.title }}</a></h3>
+    <div class="col-xs-6 col-md-3">
+        <a href="{{ book.href }}" target="_blank" class="thumbnail">
+            <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
+            <h5>{{ book.title }}</h5>
+        </a>
     </div>
     {% endfor %}
 </div>
-<hr/>
 {% endfor %}
 </body>
 </html>
