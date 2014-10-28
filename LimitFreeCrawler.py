@@ -22,11 +22,14 @@ class Crawler():
         pass
 
     @abstractmethod
-    def pipe(self):
+    def parse(self):
         pass
 
     @abstractmethod
-    def parse(self):
+    def pipe(self):
+        pass
+
+    def save(self):
         pass
 
     def start(self):
@@ -45,7 +48,7 @@ class TaobaoCrawler(Crawler):
     def pipe(self):
         res = {}
         for match in self.matches:
-            if (match[0] == 'src'):
+            if match[0] == 'src':
                 res['img'] = match[1]
             else:
                 res[match[0]] = match[1]
@@ -59,7 +62,7 @@ class DuokanCrawler(Crawler):
         self.matches = pattern.findall(self.page_content)
         url = self.matches[0]
         new_href = self.base_url + url
-        r = self.http.request('GET', "http://" + new_href)
+        r = self.http.request('GET', new_href)
         self.page_content = r.data.decode(self.charset)
         self.href = new_href
 
