@@ -12,6 +12,10 @@
         #container h3 {
             margin-left: 15px;;
         }
+
+        .center {
+            margin-left: 50px;
+        }
     </style>
 </head>
 <body>
@@ -20,18 +24,18 @@
     <span class="alert-link">注意：{{ remark }}</span>
 </div>
 {% endfor %}
-{% for platform in platforms %}
 <div id="container" style="margin: 10px auto; width: 1000px; float:left;">
-    <h3>{{ platform['config']['platform_name'] }}</h3>
+    {% for platform in platforms %}
     {% for book in platform['books'] %}
     <div class="col-xs-6 col-md-3">
+        <h4 class="center">{{ platform['config']['platform_name'] }}</h4>
         <a href="{{ book.href }}" target="_blank" class="thumbnail">
             <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
             <h5>{{ book.title }}</h5>
         </a>
     </div>
     {% endfor %}
-</div>
 {% endfor %}
+</div>
 </body>
 </html>
