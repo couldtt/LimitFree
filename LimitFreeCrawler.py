@@ -15,7 +15,10 @@ class Crawler():
         self.base_url = self.config['url']
         self.res = []  # 最终返回的今日免费电子书集合
         r = self.http.request('GET', self.config['url'])
-        self.charset = r.headers['Content-Type'].split('=')[1]
+        try:
+            self.charset = r.headers['Content-Type'].split('=')[1]
+        except:
+            self.charset = 'gbk'
         self.page_content = r.data.decode(self.charset, 'ignore')  # 为了避免解析当当网的时候出现一些诡异的无法解码的错误
 
     def pre_parse(self):
@@ -131,4 +134,27 @@ class NeteaseCrawler(Crawler):
         res['img'] = self.match.find('img').get('src')
         res['href'] = j_cutted.get('href')
         res['title'] = j_cutted.contents[0]
+        self.res.append(res)
+
+
+# 百度
+class BaiduCrawler(Crawler):
+    def pre_parse(self):
+        soup = BeautifulSoup(self.page_content)
+        cd_act_0 = soup.find('div', id='cd-act-0')
+        self.new_href = cd_act_0.find('a', class_='act-link').get('href')
+        r = self.http.request('GET', self.new_href)
+        self.page_content = r.data.decode(self.charset, 'ignore')
+
+    def parse(self):
+        soup = BeautifulSoup(self.page_content)
+        doc_info_bd = soup.find('div', class_='doc-info-bd')
+        self.match = doc_info_bd
+
+    def pipe(self):
+        res = {}
+        res['href'] = self.new_href
+        res['img'] = self.match.find('img', class_='doc-info-img').get('src')
+        res['title'] = self.match.find('h1', class_='book-title').get('title')
+        res['author'] = self.match.find('a', class_='doc-info-author-link').contents[0]
         self.res.append(res)

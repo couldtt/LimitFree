@@ -21,11 +21,15 @@ crawl_config = {
         'url': 'http://yuedu.163.com',
         'ajax_url': 'http://yuedu.163.com/special/0021rt/indexrecommend.html',
     },
+    'baidu': {
+        'platform_name': '百度',
+        'url': 'http://yuedu.baidu.com'
+    }
 }
 
 remark_config = (
     '淘宝限免电子书电脑端只能在10:00~11:00领取，使用手机客户端领取时间到次日9点',
 )
 
-crawl_container = ['duokan', 'taobao', 'dangdang']
-debug_container = ['netease', 'duokan', 'taobao']
+crawl_container = ['duokan', 'taobao', 'netease', 'baidu']
+debug_container = ['baidu']
