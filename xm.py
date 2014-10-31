@@ -4,8 +4,8 @@ from config import crawl_config, crawl_container, debug_container, remark_config
 from bottle import route, run, jinja2_view
 from storage import MongoStorage
 
-DEBUG = True
-
+DEBUG = False
+WEB_DEBUG = False
 
 class Crawl(threading.Thread):
 
@@ -16,14 +16,19 @@ class Crawl(threading.Thread):
         self.crawler = crawler_concrete(crawl_config[type])
 
     def run(self):
-        try:
-            res = self.crawler.start()
-        except:
-            res = {}
-        return res
+        if DEBUG:
+            self.crawler.start()
+        else:
+            try:
+                res = self.crawler.start()
+            except:
+                res = {}
+            return res
 
 if DEBUG:
-    crawl_container = debug_container
+    for site in debug_container:
+        crawl = Crawl(site)
+        crawl.run()
 
 @route('/')
 @jinja2_view('index.html', template_lookup=['views'])
@@ -32,7 +37,7 @@ def index():
     platforms = []
     for site in crawl_container:
         record = ms.get_today(site)
-        if record:
+        if record and WEB_DEBUG == False:
             platform = record['platform']
             platforms.append(platform)
         else:

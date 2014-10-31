@@ -18,8 +18,8 @@ class MongoStorage():
             'type': type,
             'platform': platform
         }
-        insert_id = self.collection.insert(today)
-        if insert_id:
+        save_id = self.collection.save(today)
+        if save_id:
             return True
 
     def get_today(self, type):

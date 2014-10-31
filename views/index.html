@@ -14,8 +14,13 @@
         }
 
         .center {
-            margin-left: 50px;
+            margin-left: 80px;
         }
+
+        #container a.thumbnail {
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
@@ -31,7 +36,7 @@
         <h4 class="center">{{ platform['config']['platform_name'] }}</h4>
         <a href="{{ book.href }}" target="_blank" class="thumbnail">
             <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
-            <h5>{{ book.title }}</h5>
+            <span>{{ book.title }}</span>
         </a>
     </div>
     {% endfor %}
