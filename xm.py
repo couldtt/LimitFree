@@ -1,8 +1,11 @@
 __author__ = 'couldtt'
 import threading
-from config import crawl_config, crawl_container, DEBUG, debug_container, remark_config
+from config import crawl_config, crawl_container, debug_container, remark_config
 from bottle import route, run, jinja2_view
 from storage import MongoStorage
+
+DEBUG = True
+
 
 class Crawl(threading.Thread):
 
@@ -22,20 +25,22 @@ class Crawl(threading.Thread):
 if DEBUG:
     crawl_container = debug_container
 
-
 @route('/')
 @jinja2_view('index.html', template_lookup=['views'])
 def index():
     ms = MongoStorage()
-    try:
-        record = ms.get_today()
-        platforms = record['platforms']
-    except:
-        platforms = []
-        for site in crawl_container:
+    platforms = []
+    for site in crawl_container:
+        record = ms.get_today(site)
+        if record:
+            platform = record['platform']
+            platforms.append(platform)
+        else:
             crawl = Crawl(site)
-            platforms.append(crawl.run())
-        ms.save(platforms)
+            platform = crawl.run()
+            ms.save(site, platform)
+            platforms.append(platform)
+
     return {
         'platforms': platforms,
         'remarks': remark_config

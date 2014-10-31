@@ -111,3 +111,24 @@ class DangdangCrawler(Crawler):
             res['title'] = match.get('title')
             res['img'] = match.find('img').get('src')
             self.res.append(res)
+
+
+# 网易
+class NeteaseCrawler(Crawler):
+    def pre_parse(self):
+        r = self.http.request('GET', self.config['ajax_url'])
+        self.page_content = r.data.decode(self.charset, 'ignore')
+
+    def parse(self):
+        soup = BeautifulSoup(self.page_content)
+        m_highlight = soup.find('div', class_='m-highlight')
+        self.match = m_highlight
+
+    def pipe(self):
+        res = {}
+        res['author'] = self.match.find('p', class_='author').contents[0].split(':')[1]
+        j_cutted = self.match.find('a', class_='j-cutted')
+        res['img'] = self.match.find('img').get('src')
+        res['href'] = j_cutted.get('href')
+        res['title'] = j_cutted.contents[0]
+        self.res.append(res)

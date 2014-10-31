@@ -12,14 +12,15 @@ class MongoStorage():
         localtime = time.localtime(time.time())
         self.now_time = time.strftime('%Y%m%d%H', localtime)
 
-    def save(self, platforms):
+    def save(self, type, platform):
         today = {
             'time': self.now_time,
-            'platforms': platforms
+            'type': type,
+            'platform': platform
         }
         insert_id = self.collection.insert(today)
         if insert_id:
             return True
 
-    def get_today(self):
-        return self.collection.find_one({'time': self.now_time})
+    def get_today(self, type):
+        return self.collection.find_one({'time': self.now_time, 'type': type})
