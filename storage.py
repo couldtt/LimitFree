@@ -6,9 +6,13 @@ import time
 
 class MongoStorage():
     def __init__(self):
-        client = pymongo.MongoClient('localhost', 27017)
-        self.db = client.limitfree
-        self.collection = self.db.books
+        try:
+            client = pymongo.MongoClient('localhost', 27017)
+            self.db = client.limitfree
+            self.collection = self.db.books
+        except:
+            print("MongoDB数据库链接失败")
+
         localtime = time.localtime(time.time())
         self.now_time = time.strftime('%Y%m%d%H', localtime)
 

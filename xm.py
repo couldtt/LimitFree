@@ -1,7 +1,7 @@
 __author__ = 'couldtt'
 import threading
 from config import crawl_config, crawl_container, debug_container, remark_config
-from bottle import route, run, jinja2_view
+from bottle import route, run, jinja2_view, template
 from storage import MongoStorage
 
 DEBUG = False
@@ -22,7 +22,7 @@ class Crawl(threading.Thread):
             try:
                 res = self.crawler.start()
             except:
-                res = {}
+                res = []
             return res
 
 if DEBUG:
@@ -33,6 +33,7 @@ if DEBUG:
 @route('/')
 @jinja2_view('index.html', template_lookup=['views'])
 def index():
+    '''
     ms = MongoStorage()
     platforms = []
     for site in crawl_container:
@@ -50,5 +51,27 @@ def index():
         'platforms': platforms,
         'remarks': remark_config
     }
+    '''
+    return {
+        'platforms': crawl_container,
+        'remarks': remark_config
+    }
 
-run(host='localhost', port=8080)
+
+@route('/p/<site>')
+def get_book(site):
+    ms = MongoStorage()
+    if site in crawl_container:
+        record = ms.get_today(site)
+        if record and WEB_DEBUG == False:
+            platform = record['platform']
+        else:
+            crawl = Crawl(site)
+            platform = crawl.run()
+            ms.save(site, platform)
+        return platform
+
+
+if __name__ == '__main__':
+    run(host='localhost', port=8080)
+

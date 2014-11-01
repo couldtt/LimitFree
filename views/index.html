@@ -31,16 +31,37 @@
 {% endfor %}
 <div id="container" style="margin: 10px auto; width: 1000px; float:left;">
     {% for platform in platforms %}
-    {% for book in platform['books'] %}
-    <div class="col-xs-6 col-md-3">
-        <h4 class="center">{{ platform['config']['platform_name'] }}</h4>
-        <a href="{{ book.href }}" target="_blank" class="thumbnail">
-            <img src="{{ book.img }}" alt="{{ book.title }}" style="width:150px; height: 150px;"/>
-            <span>{{ book.title }}</span>
+    <div class="col-xs-6 col-md-3" id="box_{{ platform }}">
+        <h4 class="center"></h4>
+        <a href="" target="_blank" class="thumbnail">
+            <img src="" alt="" style="width:150px; height: 150px;"/>
+            <span></span>
         </a>
     </div>
-    {% endfor %}
 {% endfor %}
 </div>
+<script>
+    $(document).ready(function () {
+        $container = $('#container');
+        {%
+            for site in platforms %}
+            $.get("/p/" + "{{ site }}", function (data) {
+                books = data.books;
+                for (key in books) {
+                    book = books[key];
+                    $box = $container.find('#box_' + "{{ site }}");
+                    $box.find('h4').html(data.config.platform_name);
+                    $box.find('a').attr({'href': book.href});
+                    $box.find('span').html(book.title);
+                    $box.find('img').attr({'src': book.img});
+                }
+            });
+            {%
+                endfor %
+            }
+        }
+        )
+        ;
+</script>
 </body>
 </html>
