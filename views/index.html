@@ -43,8 +43,7 @@
 <script>
     $(document).ready(function () {
         $container = $('#container');
-        {%
-            for site in platforms %}
+        {% for site in platforms %}
             $.get("/p/" + "{{ site }}", function (data) {
                 books = data.books;
                 for (key in books) {
@@ -56,9 +55,7 @@
                     $box.find('img').attr({'src': book.img});
                 }
             });
-            {%
-                endfor %
-            }
+            {% endfor %}
         });
 </script>
 </body>
