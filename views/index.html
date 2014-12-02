@@ -43,19 +43,22 @@
 <script>
     $(document).ready(function () {
         $container = $('#container');
-        {% for site in platforms %}
-            $.get("/p/" + "{{ site }}", function (data) {
+        $.get('/platforms', function(res){
+            var platforms = JSON.parse(res);
+            $.each(platforms, function(key, site){
+                $.get("/p/" + site, function (data) {
                 books = data.books;
                 for (key in books) {
                     book = books[key];
-                    $box = $container.find('#box_' + "{{ site }}");
+                    $box = $container.find('#box_' + site);
                     $box.find('h4').html(data.config.platform_name);
                     $box.find('a').attr({'href': book.href});
                     $box.find('span').html(book.title);
                     $box.find('img').attr({'src': book.img});
                 }
             });
-            {% endfor %}
+            });
+        });
         });
 </script>
 </body>

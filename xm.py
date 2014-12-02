@@ -1,7 +1,8 @@
 __author__ = 'couldtt'
 import threading
+import json
 from config import crawl_config, crawl_container, debug_container, remark_config
-from bottle import route, run, jinja2_view, template
+from bottle import route, run, jinja2_view
 from storage import MongoStorage
 
 DEBUG = False
@@ -71,6 +72,9 @@ def get_book(site):
             ms.save(site, platform)
         return platform
 
+@route('/platforms')
+def get_platforms():
+    return json.dumps(crawl_container)
 
 if __name__ == '__main__':
     run(host='localhost', port=8080)
