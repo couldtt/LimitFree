@@ -75,15 +75,28 @@ class DuokanCrawler(Crawler):
 
     def parse(self):
         pattern = re.compile(r'<img itemprop="image" src="(?P<src>.+?)" alt="(.+?)".*>')
-        self.matches = pattern.findall(self.page_content)
+        matches = pattern.findall(self.page_content)
+        if matches:
+            self.matches = matches
+        else:
+            pattern = re.compile(r'<a href="(.+?)".*><img src="(.+?)" alt="(.+?)" ondragstart="return false;" oncontextmenu="return false;".*></a>')
+            matches = pattern.findall(self.page_content)
+            self.matches = matches
 
     def pipe(self):
-        res = {}
-        res['img'] = self.matches[0][0]
-        res['title'] = self.matches[0][1]
-        res['href'] = self.href
-        self.res.append(res)
-
+        if len(self.matches) > 1:
+            for match in self.matches:
+                res = {}
+                res['img'] = match[1]
+                res['title'] = match[2]
+                res['href'] = self.config['url'] + match[0]
+                self.res.append(res)
+        else:
+            res = {}
+            res['img'] = self.matches[0]
+            res['title'] = self.matches[1]
+            res['href'] = self.href
+            self.res.append(res)
 
 # 当当
 class DangdangCrawler(Crawler):

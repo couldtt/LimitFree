@@ -31,14 +31,10 @@
 {% endfor %}
 <div id="container" style="margin: 10px auto; width: 1000px; float:left;">
     {% for platform in platforms %}
-    <div class="col-xs-6 col-md-3" id="box_{{ platform }}">
-        <h4 class="center"></h4>
-        <a href="" target="_blank" class="thumbnail">
-            <img src="" alt="" style="width:150px; height: 150px;"/>
-            <span></span>
-        </a>
+    <div id="box_{{ platform }}">
+
     </div>
-{% endfor %}
+    {% endfor %}
 </div>
 <script>
     $(document).ready(function () {
@@ -47,15 +43,19 @@
             var platforms = JSON.parse(res);
             $.each(platforms, function(key, site){
                 $.get("/p/" + site, function (data) {
-                books = data.books;
-                for (key in books) {
-                    book = books[key];
+                    books = data.books;
+                    var length = books.length;
                     $box = $container.find('#box_' + site);
-                    $box.find('h4').html(data.config.platform_name);
-                    $box.find('a').attr({'href': book.href});
-                    $box.find('span').html(book.title);
-                    $box.find('img').attr({'src': book.img});
-                }
+                    for (i=0; i < length; i++) {
+                        $template = $('<div class="col-xs-6 col-md-3"><h4 class="center"></h4><a href="" target="_blank" class="thumbnail"><img src="" alt="" style="width:150px; height: 150px;"/><span></span></a></div>');
+                        book = books[i];
+                        $template.find('h4').html(data.config.platform_name);
+                        $template.find('a').attr({'href': book.href});
+                        $template.find('span').html(book.title);
+                        $template.find('img').attr({'src': book.img});
+                        $box.append($template);
+                    }
+
             });
             });
         });
