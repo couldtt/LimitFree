@@ -2,8 +2,10 @@ __author__ = 'couldtt'
 import threading
 import json
 from config import crawl_config, crawl_container, debug_container, remark_config
-from bottle import route, run, jinja2_view
+from bottle import route, run, jinja2_view, default_app
+# import gunicorn
 from storage import MongoStorage
+
 
 DEBUG = False
 WEB_DEBUG = False
@@ -34,25 +36,6 @@ if DEBUG:
 @route('/')
 @jinja2_view('index.html', template_lookup=['views'])
 def index():
-    '''
-    ms = MongoStorage()
-    platforms = []
-    for site in crawl_container:
-        record = ms.get_today(site)
-        if record and WEB_DEBUG == False:
-            platform = record['platform']
-            platforms.append(platform)
-        else:
-            crawl = Crawl(site)
-            platform = crawl.run()
-            ms.save(site, platform)
-            platforms.append(platform)
-
-    return {
-        'platforms': platforms,
-        'remarks': remark_config
-    }
-    '''
     return {
         'platforms': crawl_container,
         'remarks': remark_config
@@ -76,6 +59,8 @@ def get_book(site):
 def get_platforms():
     return json.dumps(crawl_container)
 
-if __name__ == '__main__':
-    run(host='localhost', port=8080)
+def main():
+    run(server='gunicorn', host='localhost', port=8080)
 
+if __name__ == '__main__':
+    main()
