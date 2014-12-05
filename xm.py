@@ -2,8 +2,7 @@ __author__ = 'couldtt'
 import threading
 import json
 from config import crawl_config, crawl_container, debug_container, remark_config
-from bottle import route, run, jinja2_view, default_app
-# import gunicorn
+from bottle import route, run, jinja2_view
 from storage import MongoStorage
 
 

@@ -65,9 +65,9 @@ class TaobaoCrawler(Crawler):
 class DuokanCrawler(Crawler):
 
     def pre_parse(self):
-        pattern = re.compile(r'<li><a href\s?="(.+?)".*alt="限时免费"')
+        pattern = re.compile(r'<li><a href\s?="(.+?)".*alt="限时(免费|畅读)"')
         self.matches = pattern.findall(self.page_content)
-        url = self.matches[0]
+        url = self.matches[0][0]
         new_href = self.base_url + url
         r = self.http.request('GET', new_href)
         self.page_content = r.data.decode(self.charset)
