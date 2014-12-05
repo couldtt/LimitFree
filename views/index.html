@@ -10,7 +10,7 @@
     <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <style>
         #container h3 {
-            margin-left: 15px;;
+            margin-left: 15px;
         }
 
         .center {
@@ -29,7 +29,7 @@
     <span class="alert-link">注意：{{ remark }}</span>
 </div>
 {% endfor %}
-<div id="container" style="margin: 10px auto; width: 1000px; float:left;">
+<div id="container" style="margin: 10px auto; width: 1000px;">
     {% for platform in platforms %}
     <div id="box_{{ platform }}">
 
@@ -47,11 +47,11 @@
                     var length = books.length;
                     $box = $container.find('#box_' + site);
                     for (i=0; i < length; i++) {
-                        $template = $('<div class="col-xs-6 col-md-3"><h4 class="center"></h4><a href="" target="_blank" class="thumbnail"><img src="" alt="" style="width:150px; height: 150px;"/><span></span></a></div>');
+                        $template = $('<div class="col-xs-6 col-md-3"><h4 class="center"></h4><a href="" target="_blank" class="thumbnail"><img src="" alt="" style="width:150px; height: 150px;"/><p style="overflow: hidden; text-align: center; height: 22px; line-height: 22px; padding-top:4px;"></p></a></div>');
                         book = books[i];
                         $template.find('h4').html(data.config.platform_name);
                         $template.find('a').attr({'href': book.href});
-                        $template.find('span').html(book.title);
+                        $template.find('p').html(book.title);
                         $template.find('img').attr({'src': book.img});
                         $box.append($template);
                     }
